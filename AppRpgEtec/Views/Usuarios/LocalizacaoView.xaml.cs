@@ -10,8 +10,8 @@ public partial class LocalizacaoView : ContentPage
 		InitializeComponent();
 
 		viewModel = new LocalizacaoViewModel();
-		viewModel.InicializarMapa();
-
 		BindingContext = viewModel;
+		//viewModel.InicializarMapa();
+		viewModel.ExibirUsuariosNoMapa();
 	}
 }
