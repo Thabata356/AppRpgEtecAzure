@@ -24,11 +24,11 @@ namespace AppRpgEtec.ViewModels.Usuarios
             uService = new UsuarioService(token);
 
             FotografarCommand = new Command(Fotografar);
-            SalvarImagemCommand = new Command(SalvarImagem);
+            SalvarImagemAzureCommand = new Command(SalvarImagemAzure);
         }
 
         public ICommand FotografarCommand { get; }
-        public ICommand SalvarImagemCommand { get; }
+        public ICommand SalvarImagemAzureCommand { get; }
 
         private ImageSource fonteImagem;
         public ImageSource FonteImagem
@@ -88,7 +88,7 @@ namespace AppRpgEtec.ViewModels.Usuarios
 
         }
 
-        public async void SalvarImagem()
+        public async void SalvarImagemAzure()
         {
             try
             {
@@ -118,6 +118,28 @@ namespace AppRpgEtec.ViewModels.Usuarios
             {
                 await Application.Current.MainPage
                     .DisplayAlert("Ops", ex.Message + " Detalhes: " + ex.InnerException, "Ok");
+            }
+        }
+
+        public async void AbrirGaleria()
+        {
+            try 
+            {
+            //Verificação se o dispositivo suporta a camera
+                if (MediaPicker.Default.IsCaptureSupported)
+                {
+                    //Chamada para galeria do dipositivo. Fica aguardando usuario escolher a foto da galeria.
+                    FileResult photo = await MediaPicker.Default.PickPhotoAsync();
+
+                    if (photo != null)
+                    {
+                        using (Stream sourceStream = await photo.OpenReadAsync());//Leitura odos bytes da foto para Stream
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+               
             }
         }
             
