@@ -15,7 +15,7 @@
     <ContentPage.Content>
         <VerticalStackLayout Padding="25" Spacing="30">
             <Frame
-                BackgroundColor="{StaticResource MainColor}"
+                BackgroundColor="{StaticResource MainColoir}"
                 HeightRequest="{OnPlatform Android=190, iOS=220}"
                 Padding="0" HasShadow="false" CornerRadius="10">    
                 <Grid>
