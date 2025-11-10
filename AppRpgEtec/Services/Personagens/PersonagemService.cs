@@ -52,5 +52,16 @@ namespace AppRpgEtec.Services.Personagens
             return result;
         }
 
+        public async Task<ObservableCollection<Personagem>> GetByNomeAproximadoAsync(string busca)
+        {
+            string urlComplementar = $"/GetByNomeAproximado/{busca}";
+
+            ObservableCollection<Models.Personagem> ListaPersonagens = await
+            _request.GetAsync<ObservableCollection<Models.Personagem>>(apiUrlBase + urlComplementar, _token);
+            //O apiUrlBase do pdf tem uma _ e fica assim _apiUrlBase mas ele não funciona se eu deixar com a _
+
+            return ListaPersonagens;
+        }
+
     }
 }
