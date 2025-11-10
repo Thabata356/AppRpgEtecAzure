@@ -8,6 +8,7 @@ using System.Windows.Input;
 using AppRpgEtec.Models;
 using AppRpgEtec.Services.Personagens;
 //using Xamarin.Google.Crypto.Tink.Signature;
+// Thabata e Luiza
 
 namespace AppRpgEtec.ViewModels.Disputas
 {
