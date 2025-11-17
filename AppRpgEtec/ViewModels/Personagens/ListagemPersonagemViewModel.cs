@@ -23,9 +23,13 @@ namespace AppRpgEtec.ViewModels.Personagens
             _ = ObterPersonagens();
             NovoPersonagemCommand = new Command(async () => { await ExibirCadastroPersonagem(); });
             RemoverPersonagemCommand = new Command<Personagem>(async (Personagem p) => { await RemoverPersonagem(p); });
+            ZerarRankingRestaurarVidasGeralCommand = new Command(async () => { await ZerarRasnkingRestaurarVidasGeral(); });
         }
+
         public ICommand NovoPersonagemCommand { get; }
         public ICommand RemoverPersonagemCommand { get; }
+        public ICommand ZerarRankingRestaurarVidasGeralCommand { get; set; }
+
         public async Task ObterPersonagens()
         {
             try //Junto com o Cacth evitará que erros fechem o aplicativo
@@ -65,12 +69,13 @@ namespace AppRpgEtec.ViewModels.Personagens
                 {
                     personagemSelecionado = value;
 
-                    Shell.Current
-                        .GoToAsync($"cadPersonagemView?pId={personagemSelecionado.Id}");
+                    /*Shell.Current
+                        .GoToAsync($"cadPersonagemView?pId={personagemSelecionado.Id}");*/
+
+                    _ = ExibirOpcoesAsync(personagemSelecionado);
                 }
             }
         }
-
 
         public async Task RemoverPersonagem(Personagem p)
         {
@@ -95,7 +100,109 @@ namespace AppRpgEtec.ViewModels.Personagens
             }
         }
 
+        public async Task ExecutarRestaurarPontosPersonagem(Personagem p)
+        {
+            await pService.PutRestaurarPontosAsync(p);
+        }
 
+        public async Task ExecutarZerarRankingPersonagem(Personagem p)
+        {
+            await pService.PutZerarRankingAsync(p);
+        }
+
+        public async Task ExecutarZerarRankingRestaurarVidasGeral()
+        {
+            await pService.PutZerarRankingRestaurarVidasGeralAsync();
+        }
+
+        public async void ProcessarOpcaoRespondidaAsync(Personagem personagem, string result)
+        {
+            if (result.Equals("Editar Personagem"))
+            {
+                await Shell.Current
+                .GoToAsync($"cadPersonagemView?pId={personagem.Id}");
+            }
+            else if (result.Equals("Remover Personagem"))
+            {
+                if (await Application.Current.MainPage.DisplayAlert("Confirmação",
+                $"Deseja realmente remover o personagem {personagem.Nome.ToUpper()}?",
+                "Yes", "No"))
+                {
+                    await RemoverPersonagem(personagem);
+                    await Application.Current.MainPage.DisplayAlert("Informação",
+                    "Personagem removido com sucesso!", "Ok");
+                    await ObterPersonagens();
+                }
+            }
+            else if (result.Equals("Restaurar Pontos de Vida"))
+            {
+                if (await Application.Current.MainPage.DisplayAlert("Confirmação",
+                $"Restaurar os pontos de vida de {personagem.Nome.ToUpper()}?", "Yes", "No"))
+                {
+                    await ExecutarRestaurarPontosPersonagem(personagem);
+                    await Application.Current.MainPage.DisplayAlert("Informação",
+                    "Os pontos foram restaurados com sucesso.", "Ok");
+                    await ObterPersonagens();
+                }
+            }
+            else if (result.Equals("Zerar Ranking do Personagem"))
+            {
+                if (await Application.Current.MainPage.DisplayAlert("Confirmação",
+                $"Zerar o ranking de {personagem.Nome.ToUpper()}?", "Yes", "No"))
+                {
+                    await ExecutarZerarRankingPersonagem(personagem);
+                    await Application.Current.MainPage.DisplayAlert("Informação",
+                    "O ranking foi zerado com sucesso.", "Ok");
+                    await ObterPersonagens();
+                }
+            }
+        }
+
+        public async Task ExibirOpcoesAsync(Personagem personagem)
+        {
+            try
+            {
+                personagemSelecionado = null;
+                string result = string.Empty;
+
+                result = await Application.Current.MainPage
+                    .DisplayActionSheet("Opções para o personagem " + personagem.Nome,
+                        "Cancelar",
+                        "Editar Personagem",
+                        "Restaurar Pontos de Vida",
+                        "Zerar Ranking do Personagem",
+                        "Remover Personagem");
+
+                if (result != null)
+                {
+                    ProcessarOpcaoRespondidaAsync(personagem, result);
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Ops...", ex.Message, "Ok");
+            }
+        }
+
+        public async Task ZerarRasnkingRestaurarVidasGeral()
+        {
+            try
+            {
+                if (await Application.Current.MainPage.DisplayAlert("Confirmação",
+                    $"Deseja realmente zerar todo o ranking?", "Yes", "No"))
+                {
+                    await ExecutarZerarRankingRestaurarVidasGeral();
+
+                    await Application.Current.MainPage.DisplayAlert("Informação", "Ranking zerado com sucesso.", "Ok");
+
+                    await ObterPersonagens();
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Ops...", ex.Message + " Detalhes: " + ex.InnerException, "Ok");
+            }
+        }
 
     }
 }

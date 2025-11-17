@@ -9,6 +9,8 @@
     
     <ScrollView>
         <VerticalStackLayout Padding="10, 0, 0, 0" VerticalOptions="FillAndExpand">
+            <Button Text="Zerar Ranking Geral" Command="{Binding ZerarRankingRestaurarVidasGeralCommand}"
+                    FontAttributes="Bold" VerticalOptions="FillAndExpand"/>
             <ListView x:Name="listView" HasUnevenRows="True" 
                       ItemsSource="{Binding Personagens}" SelectedItem="{Binding PersonagemSelecionado}" >
                 <ListView.ItemTemplate>
