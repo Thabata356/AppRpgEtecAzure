@@ -125,34 +125,37 @@ namespace AppRpgEtec.ViewModels.Personagens
             else if (result.Equals("Remover Personagem"))
             {
                 if (await Application.Current.MainPage.DisplayAlert("Confirmação",
-                $"Deseja realmente remover o personagem {personagem.Nome.ToUpper()}?",
-                "Yes", "No"))
+                    $"Deseja realmente remover o personagem {personagem.Nome.ToUpper()}?",
+                    "Yes", "No"))
                 {
                     await RemoverPersonagem(personagem);
                     await Application.Current.MainPage.DisplayAlert("Informação",
-                    "Personagem removido com sucesso!", "Ok");
+                        "Personagem removido com sucesso!", "Ok");
+
                     await ObterPersonagens();
                 }
             }
             else if (result.Equals("Restaurar Pontos de Vida"))
             {
                 if (await Application.Current.MainPage.DisplayAlert("Confirmação",
-                $"Restaurar os pontos de vida de {personagem.Nome.ToUpper()}?", "Yes", "No"))
+                    $"Restaurar os pontos de vida de {personagem.Nome.ToUpper()}?", "Yes", "No"))
                 {
                     await ExecutarRestaurarPontosPersonagem(personagem);
                     await Application.Current.MainPage.DisplayAlert("Informação",
-                    "Os pontos foram restaurados com sucesso.", "Ok");
+                        "Os pontos foram restaurados com sucesso.", "Ok");
+
                     await ObterPersonagens();
                 }
             }
             else if (result.Equals("Zerar Ranking do Personagem"))
             {
                 if (await Application.Current.MainPage.DisplayAlert("Confirmação",
-                $"Zerar o ranking de {personagem.Nome.ToUpper()}?", "Yes", "No"))
+                    $"Zerar o ranking de {personagem.Nome.ToUpper()}?", "Yes", "No"))
                 {
                     await ExecutarZerarRankingPersonagem(personagem);
                     await Application.Current.MainPage.DisplayAlert("Informação",
-                    "O ranking foi zerado com sucesso.", "Ok");
+                        "O ranking foi zerado com sucesso.", "Ok");
+
                     await ObterPersonagens();
                 }
             }
@@ -165,13 +168,22 @@ namespace AppRpgEtec.ViewModels.Personagens
                 personagemSelecionado = null;
                 string result = string.Empty;
 
-                result = await Application.Current.MainPage
-                    .DisplayActionSheet("Opções para o personagem " + personagem.Nome,
-                        "Cancelar",
-                        "Editar Personagem",
-                        "Restaurar Pontos de Vida",
-                        "Zerar Ranking do Personagem",
-                        "Remover Personagem");
+                if (personagem.PontosVida > 0)
+                {
+                    result = await Application.Current.MainPage
+                        .DisplayActionSheet("Opções para o personagem " + personagem.Nome,
+                            "Cancelar",
+                            "Editar Personagem",
+                            "Restaurar Pontos de Vida",
+                            "Zerar Ranking do Personagem",
+                            "Remover Personagem");
+                }
+                else
+                {
+                    result = await Application.Current.MainPage
+                        .DisplayActionSheet("Opções para o personagem " + personagem.Nome,
+                            "Cancelar", "Restaurar Pontos de Vida");
+                }
 
                 if (result != null)
                 {

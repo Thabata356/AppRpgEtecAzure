@@ -37,7 +37,8 @@
             <Entry Text="{Binding Derrotas}" FontSize="Medium" Keyboard="Numeric" />
 
             <HorizontalStackLayout Spacing="20">
-                <Button Text="Salvar" Command="{Binding SalvarCommand}"></Button>
+                <Button Text="Salvar" Command="{Binding SalvarCommand}"
+                        IsEnabled="{Binding CadastroHabilitado}"></Button>
                 <Button Text="Cancel" Command="{Binding CancelarCommand}"></Button>
             </HorizontalStackLayout>
         </VerticalStackLayout>
