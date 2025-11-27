@@ -22,7 +22,6 @@ namespace AppRpgEtec.Services.Personagens
             _token = token;
         }
 
-        //Próximos métodos aqui
         public async Task<int> PostPersonagemAsync(Personagem p)
         {
             return await _request.PostReturnIntAsync(apiUrlBase, p, _token);
@@ -30,8 +29,8 @@ namespace AppRpgEtec.Services.Personagens
         public async Task<ObservableCollection<Personagem>> GetPersonagensAsync()
         {
             string urlComplementar = string.Format("{0}", "/GetAll");
-            ObservableCollection<Models.Personagem> listaPersonagens = await
-            _request.GetAsync<ObservableCollection<Models.Personagem>>(apiUrlBase + urlComplementar, _token);
+            ObservableCollection<Models.Personagem> listaPersonagens = await 
+                _request.GetAsync<ObservableCollection<Models.Personagem>>(apiUrlBase + urlComplementar, _token);
             return listaPersonagens;
         }
         public async Task<Personagem> GetPersonagemAsync(int personagemId)
