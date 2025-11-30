@@ -226,7 +226,7 @@ namespace AppRpgEtec.ViewModels.Disputas
             try
             {
                 ObservableCollection<Personagem> lista = await pService.GetPersonagensAsync();
-                DisputaPersonagens.ListaPersonagens = lista.Select(x => x.Id).ToList();
+                DisputaPersonagens.ListaIdPersonagens = lista.Select(x => x.Id).ToList();
 
                 DisputaPersonagens = await dService.PostDisputaGeralAsync(DisputaPersonagens);
 
